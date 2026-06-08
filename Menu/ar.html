@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR Kamera - Wayang Kulit</title>
+
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: Arial, sans-serif;
+    }
+
+    .ar-ui {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(92%, 380px);
+      background: rgba(0, 0, 0, 0.75);
+      color: white;
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+      z-index: 9999;
+    }
+
+    .ar-ui h3 {
+      color: #ffc76b;
+      margin-bottom: 8px;
+    }
+
+    .ar-ui p {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .ar-ui button {
+      padding: 11px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #ffc76b;
+      color: #1a1208;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="ar-ui">
+    <h3 id="judulAR">AR Wayang</h3>
+    <p id="infoAR">Arahkan kamera ke marker.</p>
+    <button onclick="history.back()">Kembali</button>
+  </div>
+
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true;"
+    arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
+
+    <a-marker type="pattern" url="../assets/marker.patt">
+
+      <a-entity
+        id="modelAR"
+        gltf-model="../assets/asset.glb"
+        position="0 0 0"
+        rotation="0 0 0"
+        scale="0.3 0.3 0.3">
+      </a-entity>
+
+      <a-text
+        id="textAR"
+        value="Wayang"
+        position="-1 1.3 0"
+        color="#FFFFFF"
+        width="3">
+      </a-text>
+
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    const nama = params.get("nama");
+
+    const judulAR = document.getElementById("judulAR");
+    const infoAR = document.getElementById("infoAR");
+    const textAR = document.getElementById("textAR");
+
+    if (mode === "tokoh") {
+      judulAR.innerText = "AR Tokoh " + nama;
+      infoAR.innerText = "Arahkan kamera ke marker untuk melihat objek tokoh " + nama + ".";
+      textAR.setAttribute("value", nama);
+    }
+
+    if (mode === "senjata") {
+      judulAR.innerText = "AR Senjata " + nama;
+      infoAR.innerText = "Arahkan kamera ke marker untuk melihat objek senjata " + nama + ".";
+      textAR.setAttribute("value", nama);
+    }
+  </script>
+
+</body>
+</html>

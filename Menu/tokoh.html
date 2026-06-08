@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokoh Wayang - Wayang Kulit AR</title>
+
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
+
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js"></script>
+</head>
+
+<body>
+  <nav class="navbar">
+    <h1>Wayang Kulit</h1>
+
+    <div class="nav-menu">
+      <a href="../index.html">Home</a>
+      <a href="sejarah.html">Sejarah</a>
+      <a href="tokoh.html">Tokoh Wayang</a>
+      <a href="panduanAR.html">Panduan AR</a>
+      <a href="tentang.html">Tentang</a>
+    </div>
+  </nav>
+
+  <main id="tokohApp">
+    <section class="page">
+      <h2>Tokoh Wayang Pandawa</h2>
+
+      <p class="section-desc">
+        Pilih salah satu tokoh Pandawa untuk melihat keterangan tokoh, filosofi,
+        fitur AR kamera tokoh, dan halaman senjata pusaka.
+      </p>
+
+      <div class="tokoh-grid">
+        <button onclick="bukaDetailTokoh('yudhistira')" class="tokoh-card">Yudhistira</button>
+        <button onclick="bukaDetailTokoh('bima')" class="tokoh-card">Bima</button>
+        <button onclick="bukaDetailTokoh('arjuna')" class="tokoh-card">Arjuna</button>
+        <button onclick="bukaDetailTokoh('nakula')" class="tokoh-card">Nakula</button>
+        <button onclick="bukaDetailTokoh('sadewa')" class="tokoh-card">Sadewa</button>
+      </div>
+    </section>
+  </main>
+  <script src="../script.js"></script>
+</body>
+</html>
