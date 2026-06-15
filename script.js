@@ -2,48 +2,60 @@ let tokohAktif = "yudhistira";
 
 const dataTokoh = {
   yudhistira: {
-    nama: "Yudhistira",
+    nama: "Yudhistira / Puntadewa",
     deskripsi:
-      "Yudhistira adalah putra tertua Pandawa yang dikenal sebagai tokoh bijaksana, sabar, jujur, dan adil. Dalam pewayangan Jawa, Yudhistira digambarkan sebagai pemimpin yang mengutamakan kebenaran dan ketenangan dalam mengambil keputusan. Ia tidak mudah terbawa emosi serta selalu berusaha menyelesaikan masalah dengan cara yang damai.",
+      "Yudhistira atau Puntadewa adalah putra tertua Pandawa yang dikenal sebagai tokoh bijaksana, sabar, jujur, dan adil. Dalam pewayangan Jawa, Yudhistira digambarkan sebagai pemimpin yang selalu mengutamakan kebenaran dan ketenangan dalam mengambil keputusan. Ia tidak mudah terbawa emosi serta berusaha menyelesaikan permasalahan dengan cara yang damai.",
     filosofi:
-      "Yudhistira melambangkan kejujuran, tanggung jawab, kesabaran, dan kepemimpinan yang adil. Tokoh ini mengajarkan bahwa seorang pemimpin harus mampu menjaga ucapan, menahan diri, serta mengambil keputusan berdasarkan kebenaran, bukan berdasarkan keinginan pribadi.",
+      "Yudhistira melambangkan kejujuran, tanggung jawab, kesabaran, dan kepemimpinan yang adil. Tokoh ini mengajarkan bahwa seorang pemimpin harus mampu menjaga ucapan, menahan diri, dan mengambil keputusan berdasarkan kebenaran.",
     senjataNama: "Jamus Kalimasada",
     senjataDeskripsi:
-      "Jamus Kalimasada adalah pusaka yang melekat dengan Yudhistira. Pusaka ini melambangkan kesucian, kebenaran, dan pegangan hidup yang kuat. Dalam pewayangan, Jamus Kalimasada sering dimaknai sebagai simbol keimanan, kebijaksanaan, dan kekuatan moral seorang pemimpin.",
-    warna: "#4169E1",
+      "Jamus Kalimasada adalah pusaka yang melekat dengan Yudhistira. Pusaka ini melambangkan kesucian, kebenaran, keimanan, dan pegangan hidup yang kuat. Dalam pewayangan, Jamus Kalimasada sering dimaknai sebagai simbol kebijaksanaan dan kekuatan moral seorang pemimpin.",
 
     modelTokoh: "../assets/puntadewa.glb",
-    modelSenjata: "../assets/jamuskalimasada.glb"
+    markerTokoh: "../assets/puntadewa.patt",
+    musikTokoh: "../assets/music/puntadewa.mp3",
+
+    modelSenjata: "../assets/jamuskalimasada.glb",
+    markerSenjata: "../assets/jamuskalimasada.patt",
+    musikSenjata: "../assets/music/jamuskalimasada.mp3"
   },
 
   bima: {
     nama: "Bima / Werkudara",
     deskripsi:
-      "Bima atau Werkudara adalah tokoh Pandawa kedua yang memiliki tubuh besar, kekuatan luar biasa, dan keberanian tinggi. Ia dikenal sebagai tokoh yang tegas, jujur, tidak suka basa-basi, dan selalu berani membela kebenaran. Walaupun terlihat keras, Bima memiliki hati yang tulus serta sangat setia kepada keluarga dan saudara-saudaranya.",
+      "Bima atau Werkudara adalah tokoh Pandawa kedua yang memiliki tubuh besar, kekuatan luar biasa, dan keberanian tinggi. Ia dikenal sebagai tokoh yang tegas, jujur, tidak suka basa-basi, serta selalu berani membela kebenaran. Walaupun terlihat keras, Bima memiliki hati yang tulus dan sangat setia kepada keluarga.",
     filosofi:
       "Bima melambangkan keberanian, kekuatan, kejujuran, dan ketegasan. Tokoh ini mengajarkan bahwa kebenaran harus diperjuangkan dengan keberanian, tetapi tetap dilandasi niat yang baik dan ketulusan hati.",
     senjataNama: "Gada Rujakpolo",
     senjataDeskripsi:
-      "Gada Rujakpolo adalah senjata pusaka milik Bima yang melambangkan kekuatan fisik, ketegasan, dan keberanian. Senjata ini menggambarkan karakter Bima yang kuat dalam menghadapi musuh serta tidak mudah menyerah ketika membela kebenaran.",
-    warna: "#8B4513",
+      "Gada Rujakpolo adalah senjata pusaka milik Bima yang melambangkan kekuatan fisik, ketegasan, dan keberanian. Senjata ini menggambarkan karakter Bima yang tidak mudah menyerah ketika menghadapi musuh dan membela kebenaran.",
 
     modelTokoh: "../assets/werkudara.glb",
-    modelSenjata: "../assets/gadarujakpolo.glb"
+    markerTokoh: "../assets/werkudara.patt",
+    musikTokoh: "../assets/music/werkudara.mp3",
+
+    modelSenjata: "../assets/rujakpolo.glb",
+    markerSenjata: "../assets/rujakpolo.patt",
+    musikSenjata: "../assets/music/rujakpolo.mp3"
   },
 
   arjuna: {
-    nama: "Arjuna",
+    nama: "Arjuna / Janoko",
     deskripsi:
-      "Arjuna adalah Pandawa ketiga yang dikenal sebagai kesatria tampan, halus, cerdas, dan ahli dalam ilmu peperangan. Ia sangat mahir menggunakan senjata panah. Dalam banyak cerita, Arjuna digambarkan sebagai tokoh yang tenang, fokus, dan mampu mengendalikan diri ketika menghadapi berbagai ujian.",
+      "Arjuna atau Janoko adalah Pandawa ketiga yang dikenal sebagai kesatria tampan, halus, cerdas, dan ahli dalam ilmu peperangan. Ia sangat mahir menggunakan senjata panah. Dalam pewayangan Jawa, Arjuna digambarkan sebagai tokoh yang tenang, fokus, dan mampu mengendalikan diri dalam menghadapi berbagai ujian.",
     filosofi:
       "Arjuna melambangkan ketenangan, fokus, kecerdasan, dan pengendalian diri. Tokoh ini mengajarkan bahwa kemampuan besar harus diimbangi dengan kebijaksanaan, ketelitian, dan ketepatan dalam bertindak.",
     senjataNama: "Panah Pasopati",
     senjataDeskripsi:
-      "Panah Pasopati adalah senjata pusaka milik Arjuna. Senjata ini melambangkan ketepatan, fokus, dan kemampuan seorang kesatria dalam menentukan arah perjuangan. Panah Pasopati menjadi simbol kecerdasan, konsentrasi, dan keteguhan hati.",
-    warna: "#2E8B57",
+      "Panah Pasopati adalah senjata pusaka milik Arjuna. Senjata ini melambangkan ketepatan, fokus, konsentrasi, dan kemampuan seorang kesatria dalam menentukan arah perjuangan. Panah Pasopati juga menjadi simbol keteguhan hati.",
 
     modelTokoh: "../assets/janoko.glb",
-    modelSenjata: "../assets/pasopati.glb"
+    markerTokoh: "../assets/janoko.patt",
+    musikTokoh: "../assets/music/janoko.mp3",
+
+    modelSenjata: "../assets/pasopati.glb",
+    markerSenjata: "../assets/pasopati.patt",
+    musikSenjata: "../assets/music/pasopati.mp3"
   },
 
   nakula: {
@@ -55,25 +67,33 @@ const dataTokoh = {
     senjataNama: "Pedang Nakula",
     senjataDeskripsi:
       "Pedang Nakula melambangkan kehormatan, ketangkasan, dan kesiapan dalam menjaga kebenaran. Senjata ini menggambarkan pribadi Nakula yang lembut, tetapi tetap memiliki keberanian saat harus bertindak.",
-    warna: "#9370DB",
 
     modelTokoh: "../assets/nakula.glb",
-    modelSenjata: "../assets/pedang.glb"
+    markerTokoh: "../assets/nakula.patt",
+    musikTokoh: "../assets/music/nakula.mp3",
+
+    modelSenjata: "../assets/pedang.glb",
+    markerSenjata: "../assets/pedang.patt",
+    musikSenjata: "../assets/music/pedang.mp3"
   },
 
   sadewa: {
     nama: "Sadewa",
     deskripsi:
-      "Sadewa adalah saudara kembar Nakula dan merupakan Pandawa termuda. Ia dikenal sebagai tokoh yang cerdas, teliti, bijaksana, dan memiliki kemampuan memahami tanda-tanda kehidupan. Sadewa sering digambarkan sebagai pribadi yang pendiam, tetapi memiliki pengetahuan yang dalam.",
+      "Sadewa adalah saudara kembar Nakula dan merupakan Pandawa termuda. Ia dikenal sebagai tokoh yang cerdas, teliti, bijaksana, dan memiliki kemampuan memahami tanda-tanda kehidupan. Sadewa sering digambarkan sebagai pribadi pendiam, tetapi memiliki pengetahuan yang dalam.",
     filosofi:
       "Sadewa melambangkan kecerdasan, ketelitian, kebijaksanaan, dan kemampuan berpikir mendalam. Tokoh ini mengajarkan bahwa sikap tenang dan tidak banyak bicara bukan berarti lemah, karena pengetahuan dan kebijaksanaan sering lahir dari ketenangan.",
     senjataNama: "Pedang Sadewa",
     senjataDeskripsi:
       "Pedang Sadewa melambangkan kecerdasan, ketelitian, dan keberanian dalam mengambil keputusan. Senjata ini menggambarkan karakter Sadewa yang tenang, cermat, dan mampu bertindak tepat dalam situasi penting.",
-    warna: "#B8860B",
-    
+
     modelTokoh: "../assets/sadewa.glb",
-    modelSenjata: "../assets/pedang.glb"
+    markerTokoh: "../assets/sadewa.patt",
+    musikTokoh: "../assets/music/sadewa.mp3",
+
+    modelSenjata: "../assets/pedang.glb",
+    markerSenjata: "../assets/pedang.patt",
+    musikSenjata: "../assets/music/pedang.mp3"
   }
 };
 
@@ -160,16 +180,25 @@ function bukaHalamanSenjata() {
 
   window.scrollTo(0, 0);
 }
+
 function bukaARTokoh() {
   const tokoh = dataTokoh[tokohAktif];
 
   window.location.href =
-    "ar.html?mode=tokoh&nama=" + encodeURIComponent(tokoh.nama);
+    "ar.html?mode=tokoh" +
+    "&nama=" + encodeURIComponent(tokoh.nama) +
+    "&model=" + encodeURIComponent(tokoh.modelTokoh) +
+    "&marker=" + encodeURIComponent(tokoh.markerTokoh) +
+    "&musik=" + encodeURIComponent(tokoh.musikTokoh);
 }
 
 function bukaARSenjata() {
   const tokoh = dataTokoh[tokohAktif];
 
   window.location.href =
-    "ar.html?mode=senjata&nama=" + encodeURIComponent(tokoh.senjataNama);
+    "ar.html?mode=senjata" +
+    "&nama=" + encodeURIComponent(tokoh.senjataNama) +
+    "&model=" + encodeURIComponent(tokoh.modelSenjata) +
+    "&marker=" + encodeURIComponent(tokoh.markerSenjata) +
+    "&musik=" + encodeURIComponent(tokoh.musikSenjata);
 }

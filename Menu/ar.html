@@ -14,14 +14,35 @@
       overflow: hidden;
       background: black;
       font-family: Arial, sans-serif;
+      touch-action: none;
+    }
+
+    #arContainer {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .hint {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.65);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      z-index: 9999;
+      text-align: center;
+      width: min(92%, 430px);
     }
 
     .ar-ui {
       position: fixed;
-      bottom: 20px;
+      bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
-      width: min(92%, 380px);
+      width: min(92%, 420px);
       background: rgba(0, 0, 0, 0.75);
       color: white;
       padding: 15px;
@@ -33,82 +54,320 @@
     .ar-ui h3 {
       color: #ffc76b;
       margin-bottom: 8px;
+      font-size: 18px;
     }
 
     .ar-ui p {
-      font-size: 14px;
-      margin-bottom: 12px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
 
     .ar-ui button {
-      padding: 11px 18px;
+      padding: 10px 14px;
       border: none;
       border-radius: 10px;
       background: #ffc76b;
       color: #1a1208;
       font-weight: bold;
       cursor: pointer;
+      margin: 3px;
+    }
+
+    #musicBtn {
+      background: #35d4d4;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="ar-ui">
-    <h3 id="judulAR">AR Wayang</h3>
-    <p id="infoAR">Arahkan kamera ke marker.</p>
-    <button onclick="history.back()">Kembali</button>
+  <div class="hint" id="statusText">
+    Memuat AR...
   </div>
 
-  <a-scene
-    embedded
-    vr-mode-ui="enabled: false"
-    renderer="logarithmicDepthBuffer: true;"
-    arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
+  <div class="ar-ui">
+    <h3 id="judulAR">AR Wayang</h3>
+    <p id="infoAR">
+      Scan marker. Geser 1 jari untuk memutar objek. Cubit 2 jari untuk zoom.
+    </p>
 
-    <a-marker type="pattern" url="../assets/marker.patt">
+    <button onclick="resetModel()">Reset Objek</button>
+    <button onclick="toggleMusic()" id="musicBtn">Aktifkan Musik</button>
+    <button onclick="kembaliHalaman()">Kembali</button>
+  </div>
 
-      <a-entity
-        id="modelAR"
-        gltf-model="../assets/asset.glb"
-        position="0 0 0"
-        rotation="0 0 0"
-        scale="0.3 0.3 0.3">
-      </a-entity>
-
-      <a-text
-        id="textAR"
-        value="Wayang"
-        position="-1 1.3 0"
-        color="#FFFFFF"
-        width="3">
-      </a-text>
-
-    </a-marker>
-
-    <a-entity camera></a-entity>
-  </a-scene>
+  <div id="arContainer"></div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const mode = params.get("mode");
-    const nama = params.get("nama");
+
+    const mode = params.get("mode") || "tokoh";
+    const nama = params.get("nama") || "Wayang";
+    const modelPath = params.get("model") || "../assets/puntadewa.glb";
+    const markerPath = params.get("marker") || "../assets/puntadewa.patt";
+    const musikPath = params.get("musik") || "../assets/music/puntadewa.mp3";
 
     const judulAR = document.getElementById("judulAR");
     const infoAR = document.getElementById("infoAR");
-    const textAR = document.getElementById("textAR");
+    const statusText = document.getElementById("statusText");
+    const arContainer = document.getElementById("arContainer");
+    const musicBtn = document.getElementById("musicBtn");
+
+    const backsound = new Audio(musikPath);
+    backsound.loop = true;
+    backsound.volume = 0.6;
+
+    let musikAktif = false;
+    let markerAktif = false;
+
+    let currentScale = 0.6;
+    let currentRotationX = -90;
+    let currentRotationY = 0;
+    let currentRotationZ = 0;
+
+    let isDragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let lastDistance = 0;
 
     if (mode === "tokoh") {
       judulAR.innerText = "AR Tokoh " + nama;
-      infoAR.innerText = "Arahkan kamera ke marker untuk melihat objek tokoh " + nama + ".";
-      textAR.setAttribute("value", nama);
+      infoAR.innerText =
+        "Scan marker tokoh " + nama + ". Geser 1 jari untuk memutar, cubit 2 jari untuk zoom.";
+    } else {
+      judulAR.innerText = "AR Senjata " + nama;
+      infoAR.innerText =
+        "Scan marker senjata " + nama + ". Geser 1 jari untuk memutar, cubit 2 jari untuk zoom.";
     }
 
-    if (mode === "senjata") {
-      judulAR.innerText = "AR Senjata " + nama;
-      infoAR.innerText = "Arahkan kamera ke marker untuk melihat objek senjata " + nama + ".";
-      textAR.setAttribute("value", nama);
+    statusText.innerText = "Memuat model dan marker...";
+
+    arContainer.innerHTML = `
+      <a-scene
+        embedded
+        vr-mode-ui="enabled: false"
+        renderer="logarithmicDepthBuffer: true; antialias: true;"
+        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
+
+        <a-marker
+          id="markerWayang"
+          type="pattern"
+          url="${markerPath}"
+          emitevents="true">
+
+          <a-entity
+            id="modelAR"
+            gltf-model="${modelPath}"
+            position="0 0 0"
+            rotation="-90 0 0"
+            scale="0.6 0.6 0.6">
+          </a-entity>
+
+        </a-marker>
+
+        <a-entity camera></a-entity>
+      </a-scene>
+    `;
+
+    setTimeout(() => {
+      const modelAR = document.getElementById("modelAR");
+      const markerWayang = document.getElementById("markerWayang");
+
+      if (modelAR) {
+        modelAR.addEventListener("model-loaded", function () {
+          statusText.innerText = "Model berhasil dimuat. Arahkan kamera ke marker.";
+          console.log("Model berhasil dimuat:", modelPath);
+        });
+
+        modelAR.addEventListener("model-error", function (e) {
+          statusText.innerText = "Model gagal dimuat. Cek nama/path file GLB.";
+          console.error("Model gagal dimuat:", modelPath, e);
+        });
+      }
+
+      if (markerWayang) {
+        markerWayang.addEventListener("markerFound", function () {
+          markerAktif = true;
+          statusText.innerText = "Marker terdeteksi. Objek 3D muncul.";
+
+          if (musikAktif) {
+            backsound.play().catch(function () {
+              statusText.innerText = "Musik diblokir browser. Klik tombol musik lagi.";
+            });
+          }
+
+          console.log("Marker ditemukan:", markerPath);
+        });
+
+        markerWayang.addEventListener("markerLost", function () {
+          markerAktif = false;
+          statusText.innerText = "Marker hilang. Arahkan kamera lagi ke marker.";
+
+          backsound.pause();
+          backsound.currentTime = 0;
+
+          console.log("Marker hilang");
+        });
+      }
+    }, 1000);
+
+    function toggleMusic() {
+      musikAktif = !musikAktif;
+
+      if (musikAktif) {
+        musicBtn.innerText = "Matikan Musik";
+
+        if (markerAktif) {
+          backsound.play().catch(function () {
+            statusText.innerText = "Musik belum bisa diputar. Klik tombol musik sekali lagi.";
+          });
+        } else {
+          statusText.innerText = "Musik aktif. Arahkan kamera ke marker.";
+        }
+      } else {
+        musicBtn.innerText = "Aktifkan Musik";
+        backsound.pause();
+        backsound.currentTime = 0;
+      }
     }
+
+    function getModel() {
+      return document.getElementById("modelAR");
+    }
+
+    function applyTransform() {
+      const modelAR = getModel();
+
+      if (!modelAR) return;
+
+      modelAR.setAttribute(
+        "rotation",
+        currentRotationX + " " + currentRotationY + " " + currentRotationZ
+      );
+
+      modelAR.setAttribute(
+        "scale",
+        currentScale + " " + currentScale + " " + currentScale
+      );
+    }
+
+    function resetModel() {
+      currentScale = 0.6;
+      currentRotationX = -90;
+      currentRotationY = 0;
+      currentRotationZ = 0;
+      applyTransform();
+    }
+
+    function getDistance(touch1, touch2) {
+      const dx = touch1.clientX - touch2.clientX;
+      const dy = touch1.clientY - touch2.clientY;
+
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        lastX = e.touches[0].clientX;
+        lastY = e.touches[0].clientY;
+      }
+
+      if (e.touches.length === 2) {
+        isDragging = false;
+        lastDistance = getDistance(e.touches[0], e.touches[1]);
+      }
+    });
+
+    document.addEventListener("touchmove", function (e) {
+      e.preventDefault();
+
+      if (e.touches.length === 1 && isDragging) {
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+
+        const deltaX = x - lastX;
+        const deltaY = y - lastY;
+
+        currentRotationY += deltaX * 0.7;
+        currentRotationX += deltaY * 0.7;
+
+        lastX = x;
+        lastY = y;
+
+        applyTransform();
+      }
+
+      if (e.touches.length === 2) {
+        const newDistance = getDistance(e.touches[0], e.touches[1]);
+        const delta = newDistance - lastDistance;
+
+        currentScale += delta * 0.002;
+
+        if (currentScale < 0.03) currentScale = 0.03;
+        if (currentScale > 5) currentScale = 5;
+
+        lastDistance = newDistance;
+
+        applyTransform();
+      }
+    }, { passive: false });
+
+    document.addEventListener("touchend", function () {
+      isDragging = false;
+    });
+
+    document.addEventListener("mousedown", function (e) {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    });
+
+    document.addEventListener("mousemove", function (e) {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - lastX;
+      const deltaY = e.clientY - lastY;
+
+      currentRotationY += deltaX * 0.7;
+      currentRotationX += deltaY * 0.7;
+
+      lastX = e.clientX;
+      lastY = e.clientY;
+
+      applyTransform();
+    });
+
+    document.addEventListener("mouseup", function () {
+      isDragging = false;
+    });
+
+    document.addEventListener("wheel", function (e) {
+      if (e.deltaY < 0) {
+        currentScale += 0.05;
+      } else {
+        currentScale -= 0.05;
+      }
+
+      if (currentScale < 0.03) currentScale = 0.03;
+      if (currentScale > 5) currentScale = 5;
+
+      applyTransform();
+    });
+
+    function kembaliHalaman() {
+      backsound.pause();
+      backsound.currentTime = 0;
+      history.back();
+    }
+
+    window.addEventListener("beforeunload", function () {
+      backsound.pause();
+      backsound.currentTime = 0;
+    });
+
+    applyTransform();
   </script>
 
 </body>
