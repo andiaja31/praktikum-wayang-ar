@@ -121,10 +121,30 @@
     let musikAktif = false;
     let markerAktif = false;
 
-    let currentScale = 0.6;
-    let currentRotationX = -90;
-    let currentRotationY = 0;
-    let currentRotationZ = 0;
+    /*
+      Pengaturan awal posisi model:
+      X = kiri / kanan
+      Y = naik / turun dari marker
+      Z = maju / mundur
+    */
+    let startPosition = "0 0 0";
+    let startScale = 0.45;
+    let startRotationX = -90;
+    let startRotationY = 0;
+    let startRotationZ = 0;
+
+    if (mode === "senjata") {
+      startPosition = "0 0 0";
+      startScale = 0.35;
+      startRotationX = -90;
+      startRotationY = 0;
+      startRotationZ = 0;
+    }
+
+    let currentScale = startScale;
+    let currentRotationX = startRotationX;
+    let currentRotationY = startRotationY;
+    let currentRotationZ = startRotationZ;
 
     let isDragging = false;
     let lastX = 0;
@@ -156,13 +176,22 @@
           url="${markerPath}"
           emitevents="true">
 
-         <a-entity
-            id="modelAR"
-            gltf-model="${modelPath}"
-            position="-0.3 -1.3 0"
-            rotation="-90 0 0"
-            scale="0.45 0.45 0.45">
+          <a-entity
+            id="modelWrapper"
+            position="0 0 0"
+            rotation="${startRotationX} ${startRotationY} ${startRotationZ}"
+            scale="${startScale} ${startScale} ${startScale}">
+
+            <a-entity
+              id="modelAR"
+              gltf-model="${modelPath}"
+              position="${startPosition}"
+              rotation="0 0 0"
+              scale="1 1 1">
+            </a-entity>
+
           </a-entity>
+
         </a-marker>
 
         <a-entity camera></a-entity>
@@ -232,30 +261,31 @@
     }
 
     function getModel() {
-      return document.getElementById("modelAR");
+      return document.getElementById("modelWrapper");
     }
 
     function applyTransform() {
-      const modelAR = getModel();
+      const modelWrapper = getModel();
 
-      if (!modelAR) return;
+      if (!modelWrapper) return;
 
-      modelAR.setAttribute(
+      modelWrapper.setAttribute(
         "rotation",
         currentRotationX + " " + currentRotationY + " " + currentRotationZ
       );
 
-      modelAR.setAttribute(
+      modelWrapper.setAttribute(
         "scale",
         currentScale + " " + currentScale + " " + currentScale
       );
     }
 
     function resetModel() {
-      currentScale = 0.6;
-      currentRotationX = -90;
-      currentRotationY = 0;
-      currentRotationZ = 0;
+      currentScale = startScale;
+      currentRotationX = startRotationX;
+      currentRotationY = startRotationY;
+      currentRotationZ = startRotationZ;
+
       applyTransform();
     }
 
